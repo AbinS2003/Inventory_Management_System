@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "9189d49d-0c25-48a7-bdcf-45338d4189a0",
+		"name": "Order Service API",
+		"description": "Collection for testing all order-related APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44249065"
+	},
+	"item": [
+		{
+			"name": "Create an Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerName\": \"Test Customer\",\r\n    \"items\": [\r\n        {\r\n            \"productId\": \"68e2a634437d171ea0fc04e1\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": \"68e2a634437d171ea0fc04ee\",\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/api/orders?page=0&pageSize=10\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "10\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Order By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/api/orders/68e2a79679a2a129a053ede3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"orders",
+						"68e2a79679a2a129a053ede3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Report By Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/api/reports/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"reports",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Report By Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/api/reports/category",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"reports",
+						"category"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
