@@ -1,4 +1,4 @@
-package com.example.product_service.config;
+package com.example.product_service.loader;
 
 import com.example.product_service.dto.ProductRequest;
 import com.example.product_service.dto.VariantRequest;
