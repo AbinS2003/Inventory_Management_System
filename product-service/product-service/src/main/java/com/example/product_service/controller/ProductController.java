@@ -156,25 +156,4 @@ public class ProductController {
         return productService.filterProducts(category, page, pageSize);
     }
 
-    @PutMapping("/reduce/{id}")
-    @Operation(
-            summary = "Reduce product stock ",
-            description = "Reduces the quantity of a specific product by the given amount."
-    )
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Stock reduced successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Product not found"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error - Failed to fetch products"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Insufficent stock")
-    })
-    public ResponseEntity<ApiResponse<ProductResponse>> updateQuantity(@Parameter(description = "Unique ID of the product to update")@PathVariable String id,
-                                                                       @RequestParam @Min(value = 1, message = "Quantity must be at least 1")
-                                                                       int quantity){
-
-        return productService.updateQuantity(id, quantity);
-    }
-
-
-
-
 }

@@ -1,9 +1,13 @@
 package com.example.order_service.dto;
 
+import java.util.Map;
+
 public class OrderItemResponseDTO {
 
     private String productId;
     private String productName;
+    private String variantId;
+    private Map<String, String> attributes;
     private int qty;
     private double price;
     private String category;
@@ -12,9 +16,11 @@ public class OrderItemResponseDTO {
     public OrderItemResponseDTO() {
     }
 
-    public OrderItemResponseDTO(String productId, String productName, int qty, double price, String category, double totalPrice) {
+    public OrderItemResponseDTO(String productId, String productName, String variantId, Map<String, String> attributes, int qty, double price, String category, double totalPrice) {
         this.productId = productId;
         this.productName = productName;
+        this.variantId = variantId;
+        this.attributes = attributes;
         this.qty = qty;
         this.price = price;
         this.category = category;
@@ -37,6 +43,22 @@ public class OrderItemResponseDTO {
         this.productName = productName;
     }
 
+    public String getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(String variantId) {
+        this.variantId = variantId;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
+
     public int getQty() {
         return qty;
     }
@@ -53,19 +75,19 @@ public class OrderItemResponseDTO {
         this.price = price;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

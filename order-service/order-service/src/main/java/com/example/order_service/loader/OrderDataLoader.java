@@ -12,99 +12,76 @@ import java.util.List;
 @Component
 public class OrderDataLoader implements CommandLineRunner {
 
-    private final OrderRepository orderRepository;
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
-    public OrderDataLoader(OrderRepository orderRepository, OrderService orderService) {
-        this.orderRepository = orderRepository;
+    public OrderDataLoader(OrderService orderService, OrderRepository orderRepository) {
         this.orderService = orderService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         if (orderRepository.count() == 0) {
 
             List<CreateOrderRequest> orders = List.of(
-                    new CreateOrderRequest("Alice", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 2)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563b", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b6785d", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67867", 1)
                     )),
-                    new CreateOrderRequest("Bob", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 3)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563c", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b6785f", 1)
                     )),
-                    new CreateOrderRequest("Charlie", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 1)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563d", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67863", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67865", 2)
                     )),
-                    new CreateOrderRequest("David", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f3", 1)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563e", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67861", 3)
                     )),
-                    new CreateOrderRequest("Eve", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 2)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563f", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67863", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67861", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67867", 2)
                     )),
-                    new CreateOrderRequest("Frank", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 2)
+
+                    new CreateOrderRequest("68f76f20489852a565f35640", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b6785f", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67863", 1)
                     )),
-                    new CreateOrderRequest("Grace", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f3", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 1)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563b", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b6785d", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67865", 1)
                     )),
-                    new CreateOrderRequest("Hannah", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 1)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563c", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67865", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67861", 2)
                     )),
-                    new CreateOrderRequest("Ivy", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 1)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563d", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67863", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67865", 1)
                     )),
-                    new CreateOrderRequest("Jack", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 1)
-                    )),
-                    new CreateOrderRequest("Kevin", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 2)
-                    )),
-                    new CreateOrderRequest("Laura", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 3),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 1)
-                    )),
-                    new CreateOrderRequest("Mike", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 1)
-                    )),
-                    new CreateOrderRequest("Nina", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 1)
-                    )),
-                    new CreateOrderRequest("Oscar", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f3", 1)
-                    )),
-                    new CreateOrderRequest("Pam", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 1)
-                    )),
-                    new CreateOrderRequest("Quinn", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 3)
-                    )),
-                    new CreateOrderRequest("Ryan", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 1)
-                    )),
-                    new CreateOrderRequest("Sophia", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 2)
-                    )),
-                    new CreateOrderRequest("Tom", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 2)
+
+                    new CreateOrderRequest("68f76f1f489852a565f3563e", List.of(
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67863", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67865", 1),
+                            new OrderItemsRequest("68f76c9937d5b9cb69b67861", 1)
                     ))
             );
 
 
-            for (CreateOrderRequest createOrderRequest : orders){
-                orderService.createOrder(createOrderRequest);
-            }
+            orders.forEach(orderService::createOrder);
 
-            System.out.println("Order data loaded!!");
+            System.out.println("sample orders with multiple variants created!");
         }
-
     }
 }

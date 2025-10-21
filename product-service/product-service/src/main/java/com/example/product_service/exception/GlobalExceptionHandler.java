@@ -85,4 +85,13 @@ public class GlobalExceptionHandler {
         ));
 
     }
+
+    @ExceptionHandler(VariantNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleVariantNotFOund(VariantNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponse<>
+                        (HttpStatus.NOT_FOUND.value(),
+                                ex.getMessage(),
+                                null));
+    }
 }

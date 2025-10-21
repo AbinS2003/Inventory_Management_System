@@ -6,24 +6,24 @@ import jakarta.validation.constraints.NotBlank;
 public class OrderItemsRequest {
 
     @NotBlank(message = "Product ID is required")
-    private String productId;
+    private String variantId;
     @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
 
     public OrderItemsRequest() {
     }
 
-    public OrderItemsRequest(String productId, int quantity) {
-        this.productId = productId;
+    public OrderItemsRequest(String variantId, int quantity) {
+        this.variantId = variantId;
         this.quantity = quantity;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getVariantId() {
+        return variantId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setVariantId(String variantId) {
+        this.variantId = variantId;
     }
 
     public int getQuantity() {

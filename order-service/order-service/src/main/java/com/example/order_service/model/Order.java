@@ -11,6 +11,7 @@ public class Order {
 
     @Id
     private String id;
+    private String customerId;
     private String customerName;
     private List<OrderItem> items;
     private double totalAmount;
@@ -18,7 +19,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(String customerName, List<OrderItem> items, double totalAmount) {
+    public Order( String customerId, String customerName, List<OrderItem> items, double totalAmount) {
+        this.customerId = customerId;
         this.customerName = customerName;
         this.items = items;
         this.totalAmount = totalAmount;
@@ -32,12 +34,12 @@ public class Order {
         this.id = id;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public List<OrderItem> getItems() {
@@ -54,5 +56,13 @@ public class Order {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }

@@ -12,8 +12,6 @@ public class Product {
     private String id;
     @TextIndexed
     private String name;
-    private double price;
-    private int quantity;
     @Indexed
     private String category;
 
@@ -21,20 +19,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, double price, int quantity, String category) {
+    public Product(String name, String category) {
         this.name = name;
-        this.price = price;
-        this.quantity = quantity;
         this.category = category;
     }
 
-    public Product(String id, String name, double price, int quantity, String category) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.category = category;
-    }
 
     public String getId() {
         return id;
@@ -50,22 +39,6 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public String getCategory() {

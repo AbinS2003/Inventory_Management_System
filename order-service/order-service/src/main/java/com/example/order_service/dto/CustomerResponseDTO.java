@@ -1,18 +1,18 @@
 package com.example.order_service.dto;
 
-public class ProductResponseDTO {
+public class CustomerResponseDTO {
 
     private String id;
     private String name;
-    private String category;
+    private String email;
 
-    public ProductResponseDTO() {
+    public CustomerResponseDTO() {
     }
 
-    public ProductResponseDTO(String id, String name, String category) {
+    public CustomerResponseDTO(String id, String name, String email) {
         this.id = id;
         this.name = name;
-        this.category = category;
+        this.email = email;
     }
 
     public String getId() {
@@ -31,12 +31,11 @@ public class ProductResponseDTO {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
 }
