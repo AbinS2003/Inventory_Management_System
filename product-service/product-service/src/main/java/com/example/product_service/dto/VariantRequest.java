@@ -1,6 +1,7 @@
 package com.example.product_service.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,9 +17,11 @@ public class VariantRequest {
     )    private String id;
 
     @NotNull(message = "Price is required")
+    @Min(value = 1, message = "Price must be at least 1")
     private Double price;
 
     @NotNull(message = "Quantity is required")
+    @Min(value = 0, message = "Quantity must be at least 0")
     private Integer quantity;
 
     @NotEmpty(message = "Attributes are required")

@@ -1,5 +1,6 @@
 package com.example.order_service.model;
 
+import java.util.List;
 import java.util.Map;
 
 public class OrderItem {
@@ -12,11 +13,12 @@ public class OrderItem {
     private int qty;
     private double price;
     private double totalPrice;
+    private List<AddonItem> addonItems;
 
     public OrderItem() {
     }
 
-    public OrderItem(String productId, String variantId, String productName, String category, Map<String, String> attributes, int qty, double price, double totalPrice) {
+    public OrderItem(String productId, String variantId, String productName, String category, Map<String, String> attributes, int qty, double price, double totalPrice, List<AddonItem> addonItems) {
         this.productId = productId;
         this.variantId = variantId;
         this.productName = productName;
@@ -25,6 +27,7 @@ public class OrderItem {
         this.qty = qty;
         this.price = price;
         this.totalPrice = totalPrice;
+        this.addonItems = addonItems;
     }
 
     public String getProductId() {
@@ -89,5 +92,13 @@ public class OrderItem {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<AddonItem> getAddonItems() {
+        return addonItems;
+    }
+
+    public void setAddonItems(List<AddonItem> addonItems) {
+        this.addonItems = addonItems;
     }
 }

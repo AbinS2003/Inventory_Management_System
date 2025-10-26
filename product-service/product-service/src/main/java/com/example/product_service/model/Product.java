@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "products")
 public class Product {
 
@@ -14,16 +16,23 @@ public class Product {
     private String name;
     @Indexed
     private String category;
+    private List<String> addonProductIds;
+
 
 
     public Product() {
+    }
+
+    public Product(String name, String category, List<String> addonProductIds) {
+        this.name = name;
+        this.category = category;
+        this.addonProductIds = addonProductIds;
     }
 
     public Product(String name, String category) {
         this.name = name;
         this.category = category;
     }
-
 
     public String getId() {
         return id;
@@ -47,5 +56,13 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<String> getAddonProductIds() {
+        return addonProductIds;
+    }
+
+    public void setAddonProductIds(List<String> addonProductIds) {
+        this.addonProductIds = addonProductIds;
     }
 }

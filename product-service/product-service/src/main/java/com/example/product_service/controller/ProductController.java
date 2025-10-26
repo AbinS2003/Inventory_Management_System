@@ -1,5 +1,6 @@
 package com.example.product_service.controller;
 
+import com.example.product_service.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -154,6 +157,16 @@ public class ProductController {
                                                                              @RequestParam(defaultValue = "10") int pageSize){
 
         return productService.filterProducts(category, page, pageSize);
+    }
+
+    @GetMapping("/variant-ids/by-product-name/{name}")
+    @Operation(
+            summary = "This Api is for adding sample Data(Initial Data Loading)",
+            description = "Fetches all variantIds from product names."
+    )
+    public List<String> getVariantIdsByProductName(@PathVariable String name) {
+
+        return productService.getVariantIdsByProductName(name);
     }
 
 }

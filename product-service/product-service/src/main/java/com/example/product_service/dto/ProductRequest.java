@@ -1,5 +1,6 @@
 package com.example.product_service.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -14,15 +15,25 @@ public class ProductRequest {
     private String category;
 
     @NotEmpty(message = "At least one variant is required")
+    @Valid
     private List<VariantRequest> variants;
+
+    private List<String> addonProductIds;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(String name, String category, List<VariantRequest> variantRequests) {
+    public ProductRequest(String name, String category, List<VariantRequest> variants, List<String> addonProductIds) {
         this.name = name;
         this.category = category;
-        this.variants = variantRequests;
+        this.variants = variants;
+        this.addonProductIds = addonProductIds;
+    }
+
+    public ProductRequest(String name, String category, List<VariantRequest> variants) {
+        this.name = name;
+        this.category = category;
+        this.variants = variants;
     }
 
     public String getName() {
@@ -47,5 +58,13 @@ public class ProductRequest {
 
     public void setVariants(List<VariantRequest> variants) {
         this.variants = variants;
+    }
+
+    public List<String> getAddonProductIds() {
+        return addonProductIds;
+    }
+
+    public void setAddonProductIds(List<String> addonProductIds) {
+        this.addonProductIds = addonProductIds;
     }
 }

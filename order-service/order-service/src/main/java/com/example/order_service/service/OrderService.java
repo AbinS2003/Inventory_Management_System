@@ -4,6 +4,7 @@ import com.example.order_service.exception.*;
 import com.example.order_service.dto.*;
 import com.example.order_service.feign.ProductClient;
 import com.example.order_service.feign.VariantClient;
+import com.example.order_service.model.AddonItem;
 import com.example.order_service.model.Customer;
 import com.example.order_service.model.Order;
 import com.example.order_service.model.OrderItem;
@@ -81,7 +82,61 @@ public class OrderService {
 
             variantClient.updateStock(variant.getVariantId(), orderItemsRequest.getQuantity());
 
-            double totalPrice = variant.getPrice() * orderItemsRequest.getQuantity();
+            double mainTotalPrice = variant.getPrice() * orderItemsRequest.getQuantity();
+            double addonPrice = 0;
+
+            List<AddonItem> addonItems = new ArrayList<>();
+            if (orderItemsRequest.getAddons() != null){
+
+                for (AddonRequest addonReq : orderItemsRequest.getAddons()){
+
+                    if (addonReq.getVariantId() == null || addonReq.getVariantId().isBlank()) continue;
+
+                    VariantResponseDTO addonVariant;
+                    try{
+                        ApiResponse<VariantResponseDTO> addonVariantResp =  variantClient.getVariantById(addonReq.getVariantId());
+                        addonVariant = addonVariantResp.getData();
+
+                        if (addonVariant == null) {
+                            throw new VariantNotFoundException(addonReq.getVariantId());
+                        }
+                    } catch (FeignException.NotFound e) {
+                        throw new VariantNotFoundException(addonReq.getVariantId());
+                    }
+
+                    ProductResponseDTO addonProduct;
+
+                    try{
+                        ApiResponse<ProductResponseDTO> addonProductResp = productClient.getProductById(addonVariant.getProductId());
+                        addonProduct = addonProductResp.getData();
+
+                        if (addonProduct == null) {
+                            throw new ProductNotFoundException(addonVariant.getProductId());
+                        }
+
+                    } catch (FeignException.NotFound e){
+                        throw new ProductNotFoundException(addonVariant.getProductId());
+                    }
+
+                    if (addonVariant.getQuantity() < 1) {
+                        throw new InsufficentStockException(addonVariant.getVariantId());
+                    }
+
+                    variantClient.updateStock(addonVariant.getVariantId(), 1);
+
+                    AddonItem addonItem = new AddonItem();
+
+                    addonItem.setAddonProductId(addonProduct.getId());
+                    addonItem.setAddonVariantId(addonVariant.getVariantId());
+                    addonItem.setAddonName(addonProduct.getName());
+                    addonItem.setAttributes(addonVariant.getAttributes());
+                    addonItem.setPrice(addonVariant.getPrice());
+
+                    addonItems.add(addonItem);
+
+                    addonPrice += addonItem.getPrice();
+                }
+            }
 
             OrderItem orderItem = new OrderItem(
                     product.getId(),
@@ -91,11 +146,12 @@ public class OrderService {
                     variant.getAttributes(),
                     orderItemsRequest.getQuantity(),
                     variant.getPrice(),
-                    totalPrice
+                    mainTotalPrice,
+                    addonItems
             );
 
             orderItems.add(orderItem);
-            totalAmount += totalPrice;
+            totalAmount += mainTotalPrice + addonPrice;
         }
 
         Order order = new Order(createOrderRequest.getCustomerId(),
@@ -106,16 +162,31 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
 
         List<OrderItemResponseDTO> orderItemResponseDTOs = savedOrder.getItems().stream()
-                                                            .map(item -> new OrderItemResponseDTO(
-                                                                    item.getProductId(),
-                                                                    item.getProductName(),
-                                                                    item.getVariantId(),
-                                                                    item.getAttributes(),
-                                                                    item.getQty(),
-                                                                    item.getPrice(),
-                                                                    item.getCategory(),
-                                                                    item.getTotalPrice())
-                                                              ).collect(Collectors.toList());
+                                                            .map(item -> {
+
+                                                                List<AddonItemsResponseDTO> addonResponses = item.getAddonItems().stream()
+                                                                        .map(addon -> {
+                                                                            AddonItemsResponseDTO dto = new AddonItemsResponseDTO();
+                                                                            dto.setAddonProductId(addon.getAddonProductId());
+                                                                            dto.setAddonVariantId(addon.getAddonVariantId());
+                                                                            dto.setAddonName(addon.getAddonName());
+                                                                            dto.setAttributes(addon.getAttributes());
+                                                                            dto.setPrice(addon.getPrice());
+                                                                            return dto;
+                                                                        }).toList();
+
+                                                                OrderItemResponseDTO dto = new OrderItemResponseDTO();
+                                                                dto.setProductId(item.getProductId());
+                                                                dto.setVariantId(item.getVariantId());
+                                                                dto.setProductName(item.getProductName());
+                                                                dto.setCategory(item.getCategory());
+                                                                dto.setAttributes(item.getAttributes());
+                                                                dto.setQty(item.getQty());
+                                                                dto.setPrice(item.getPrice());
+                                                                dto.setTotalPrice(item.getTotalPrice());
+                                                                dto.setAddons(addonResponses);
+                                                                return dto;
+                                                                    }).toList();
 
         OrderResponse orderResponse = new OrderResponse(savedOrder.getId(),
                                                         customer.getName(),
@@ -139,24 +210,31 @@ public class OrderService {
 
         Order order = orderOpt.get();
 
-        Optional<Customer> customerOpt = customerRepository.findById(order.getCustomerId());
-        if (customerOpt.isEmpty()) {
-            throw new CustomerNotFoundException(order.getCustomerId());
-        }
-        Customer customer = customerOpt.get();
-
         List<OrderItemResponseDTO> orderItems = order.getItems().stream()
-                .map(item -> new OrderItemResponseDTO(
-                        item.getProductId(),
-                        item.getProductName(),
-                        item.getVariantId(),
-                        item.getAttributes(),
-                        item.getQty(),
-                        item.getPrice(),
-                        item.getCategory(),
-                        item.getTotalPrice()
-                                ))
-                                .collect(Collectors.toList());
+                .map(item -> {
+                    List<AddonItemsResponseDTO> addonItemsResponses = item.getAddonItems().stream()
+                            .map(addon -> {
+                                AddonItemsResponseDTO dto = new AddonItemsResponseDTO();
+                                dto.setAddonProductId(addon.getAddonProductId());
+                                dto.setAddonVariantId(addon.getAddonVariantId());
+                                dto.setAddonName(addon.getAddonName());
+                                dto.setAttributes(addon.getAttributes());
+                                dto.setPrice(addon.getPrice());
+                                return dto;
+                            }).toList();
+
+                    OrderItemResponseDTO dto = new OrderItemResponseDTO();
+                    dto.setProductId(item.getProductId());
+                    dto.setVariantId(item.getVariantId());
+                    dto.setProductName(item.getProductName());
+                    dto.setCategory(item.getCategory());
+                    dto.setAttributes(item.getAttributes());
+                    dto.setQty(item.getQty());
+                    dto.setPrice(item.getPrice());
+                    dto.setTotalPrice(item.getTotalPrice());
+                    dto.setAddons(addonItemsResponses);
+                    return dto;
+                }).toList();
 
 
         OrderResponse orderResponse = new OrderResponse(order.getId(),
@@ -183,16 +261,31 @@ public class OrderService {
 
        Page<OrderResponse> orderResponses = orders.map(order ->{
                List<OrderItemResponseDTO> orderItems = order.getItems().stream()
-                       .map(item ->
-                       new OrderItemResponseDTO(  item.getProductId(),
-                               item.getProductName(),
-                               item.getVariantId(),
-                               item.getAttributes(),
-                               item.getQty(),
-                               item.getPrice(),
-                               item.getCategory(),
-                               item.getTotalPrice()))
-                       .collect(Collectors.toList());
+                       .map(item ->{
+
+                           List<AddonItemsResponseDTO> addonItemsResponses = item.getAddonItems().stream()
+                                   .map(addon -> {
+                                       AddonItemsResponseDTO dto = new AddonItemsResponseDTO();
+                                       dto.setAddonProductId(addon.getAddonProductId());
+                                       dto.setAddonVariantId(addon.getAddonVariantId());
+                                       dto.setAddonName(addon.getAddonName());
+                                       dto.setAttributes(addon.getAttributes());
+                                       dto.setPrice(addon.getPrice());
+                                       return dto;
+                                   }).toList();
+
+                           OrderItemResponseDTO dto = new OrderItemResponseDTO();
+                           dto.setProductId(item.getProductId());
+                           dto.setVariantId(item.getVariantId());
+                           dto.setProductName(item.getProductName());
+                           dto.setCategory(item.getCategory());
+                           dto.setAttributes(item.getAttributes());
+                           dto.setQty(item.getQty());
+                           dto.setPrice(item.getPrice());
+                           dto.setTotalPrice(item.getTotalPrice());
+                           dto.setAddons(addonItemsResponses);
+                           return dto;
+                       }).toList();
 
                return new OrderResponse(order.getId(),
                        order.getCustomerName(),

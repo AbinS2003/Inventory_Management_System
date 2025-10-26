@@ -1,7 +1,10 @@
 package com.example.order_service.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.List;
 
 public class OrderItemsRequest {
 
@@ -9,13 +12,24 @@ public class OrderItemsRequest {
     private String variantId;
     @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
+    @Valid
+    private List<AddonRequest> addons;
 
     public OrderItemsRequest() {
     }
 
-    public OrderItemsRequest(String variantId, int quantity) {
+    public OrderItemsRequest(String variantId, int quantity, List<AddonRequest> addons) {
         this.variantId = variantId;
         this.quantity = quantity;
+        this.addons = addons;
+    }
+
+    public List<AddonRequest> getAddons() {
+        return addons;
+    }
+
+    public void setAddons(List<AddonRequest> addons) {
+        this.addons = addons;
     }
 
     public String getVariantId() {

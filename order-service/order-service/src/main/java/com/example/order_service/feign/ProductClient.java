@@ -6,10 +6,15 @@ import org.springframework.web.bind.annotation.*;
 import com.example.order_service.dto.ApiResponse;
 import com.example.order_service.dto.ProductResponseDTO;
 
+import java.util.List;
+
 @FeignClient(name = "product-service", contextId = "productClient", url = "http://localhost:8081/api/products")
 public interface ProductClient {
 
     @GetMapping("{id}")
     public ApiResponse<ProductResponseDTO> getProductById(@PathVariable("id") String productId);
+
+    @GetMapping("/variant-ids/by-product-name/{name}")
+    List<String> getVariantIdsByProductName(@PathVariable("name") String name);
 
 }

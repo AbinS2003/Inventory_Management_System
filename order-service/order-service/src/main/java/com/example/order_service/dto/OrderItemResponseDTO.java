@@ -1,5 +1,6 @@
 package com.example.order_service.dto;
 
+import java.util.List;
 import java.util.Map;
 
 public class OrderItemResponseDTO {
@@ -12,11 +13,12 @@ public class OrderItemResponseDTO {
     private double price;
     private String category;
     private double totalPrice;
+    private List<AddonItemsResponseDTO> addons;
 
     public OrderItemResponseDTO() {
     }
 
-    public OrderItemResponseDTO(String productId, String productName, String variantId, Map<String, String> attributes, int qty, double price, String category, double totalPrice) {
+    public OrderItemResponseDTO(String productId, String productName, String variantId, Map<String, String> attributes, int qty, double price, String category, double totalPrice, List<AddonItemsResponseDTO> addons) {
         this.productId = productId;
         this.productName = productName;
         this.variantId = variantId;
@@ -25,6 +27,7 @@ public class OrderItemResponseDTO {
         this.price = price;
         this.category = category;
         this.totalPrice = totalPrice;
+        this.addons = addons;
     }
 
     public String getProductId() {
@@ -89,5 +92,13 @@ public class OrderItemResponseDTO {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<AddonItemsResponseDTO> getAddons() {
+        return addons;
+    }
+
+    public void setAddons(List<AddonItemsResponseDTO> addons) {
+        this.addons = addons;
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VariantRepository extends MongoRepository<Variant, String> {
@@ -15,4 +16,6 @@ public interface VariantRepository extends MongoRepository<Variant, String> {
     List<Variant> findByProductId(String id);
 
     List<Variant> findByProductIdIn(List<String> productIds);
+
+
 }

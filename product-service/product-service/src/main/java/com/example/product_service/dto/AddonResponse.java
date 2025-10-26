@@ -2,24 +2,21 @@ package com.example.product_service.dto;
 
 import java.util.List;
 
-public class ProductResponse {
+public class AddonResponse {
 
     private String id;
     private String name;
     private String category;
     private List<VariantResponse> variantResponses;
-    private List<AddonResponse> addonProducts;
 
-
-    public ProductResponse() {
+    public AddonResponse() {
     }
 
-    public ProductResponse(String id, String name, String category, List<VariantResponse> variantResponses, List<AddonResponse> addonProducts) {
+    public AddonResponse(String id, String name, String category, List<VariantResponse> variantResponses) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.variantResponses = variantResponses;
-        this.addonProducts = addonProducts;
     }
 
     public String getId() {
@@ -52,13 +49,5 @@ public class ProductResponse {
 
     public void setVariantResponses(List<VariantResponse> variantResponses) {
         this.variantResponses = variantResponses;
-    }
-
-    public List<AddonResponse> getAddonProducts() {
-        return addonProducts;
-    }
-
-    public void setAddonProducts(List<AddonResponse> addonProducts) {
-        this.addonProducts = addonProducts;
     }
 }
