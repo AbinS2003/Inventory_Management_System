@@ -94,6 +94,26 @@ public class GlobalExceptionHandler {
                 null
         ));
     }
+
+    @ExceptionHandler(VariantNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleVariantNotFound(VariantNotFoundException ex){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                null
+        ));
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleCustomerNotFound(CustomerNotFoundException ex){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                null
+        ));
+    }
 }
 
 

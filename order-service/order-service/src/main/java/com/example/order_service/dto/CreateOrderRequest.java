@@ -8,26 +8,28 @@ import java.util.List;
 
 public class CreateOrderRequest {
 
-    @NotBlank(message = "Customer name is required")
-    private String customerName;
+    @NotBlank(message = "Customer id is required")
+    private String customerId;
     @NotEmpty(message = "Order must contain at least one item")
     @Valid
     private List<OrderItemsRequest> items;
 
+
+
     public CreateOrderRequest() {
     }
 
-    public CreateOrderRequest(String customerName, List<OrderItemsRequest> items) {
-        this.customerName = customerName;
+    public CreateOrderRequest(String customerId, List<OrderItemsRequest> items) {
+        this.customerId = customerId;
         this.items = items;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public List<OrderItemsRequest> getItems() {

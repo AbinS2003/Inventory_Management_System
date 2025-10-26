@@ -1,7 +1,10 @@
 package com.example.order_service.loader;
 
+import com.example.order_service.dto.AddonRequest;
 import com.example.order_service.dto.CreateOrderRequest;
 import com.example.order_service.dto.OrderItemsRequest;
+import com.example.order_service.feign.ProductClient;
+import com.example.order_service.repository.CustomerRepository;
 import com.example.order_service.repository.OrderRepository;
 import com.example.order_service.service.OrderService;
 import org.springframework.boot.CommandLineRunner;
@@ -9,102 +12,86 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+
 @Component
 public class OrderDataLoader implements CommandLineRunner {
 
-    private final OrderRepository orderRepository;
+    private final ProductClient productClient;
+    private final CustomerRepository customerRepository;
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
-    public OrderDataLoader(OrderRepository orderRepository, OrderService orderService) {
-        this.orderRepository = orderRepository;
+    public OrderDataLoader(ProductClient productClient, CustomerRepository customerRepository, OrderService orderService, OrderRepository orderRepository) {
+        this.productClient = productClient;
+        this.customerRepository = customerRepository;
         this.orderService = orderService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
-        if (orderRepository.count() == 0) {
+        if(orderRepository.count() == 0) {
 
-            List<CreateOrderRequest> orders = List.of(
-                    new CreateOrderRequest("Alice", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 2)
-                    )),
-                    new CreateOrderRequest("Bob", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 3)
-                    )),
-                    new CreateOrderRequest("Charlie", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 1)
-                    )),
-                    new CreateOrderRequest("David", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f3", 1)
-                    )),
-                    new CreateOrderRequest("Eve", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 2)
-                    )),
-                    new CreateOrderRequest("Frank", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 2)
-                    )),
-                    new CreateOrderRequest("Grace", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f3", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 1)
-                    )),
-                    new CreateOrderRequest("Hannah", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 1)
-                    )),
-                    new CreateOrderRequest("Ivy", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 1)
-                    )),
-                    new CreateOrderRequest("Jack", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 1)
-                    )),
-                    new CreateOrderRequest("Kevin", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 2)
-                    )),
-                    new CreateOrderRequest("Laura", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 3),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 1)
-                    )),
-                    new CreateOrderRequest("Mike", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 1)
-                    )),
-                    new CreateOrderRequest("Nina", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 1)
-                    )),
-                    new CreateOrderRequest("Oscar", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f3", 1)
-                    )),
-                    new CreateOrderRequest("Pam", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 1)
-                    )),
-                    new CreateOrderRequest("Quinn", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 3)
-                    )),
-                    new CreateOrderRequest("Ryan", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f1", 2),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f0", 1)
-                    )),
-                    new CreateOrderRequest("Sophia", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04ef", 2)
-                    )),
-                    new CreateOrderRequest("Tom", List.of(
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f2", 1),
-                            new OrderItemsRequest("68e2a634437d171ea0fc04f4", 2)
-                    ))
+            String customer1Id = customerRepository.findByName("Alice Johnson").orElseThrow().getId();
+            String customer2Id = customerRepository.findByName("Bob Smith").orElseThrow().getId();
+            String customer3Id = customerRepository.findByName("Julia Roberts").orElseThrow().getId();
+            String customer4Id = customerRepository.findByName("Ethan Hunt").orElseThrow().getId();
+            String customer5Id = customerRepository.findByName("Hannah Lee").orElseThrow().getId();
+
+            String laptopVariantId = productClient.getVariantIdsByProductName("Gaming Laptop").get(0);
+            String mouseVariantId = productClient.getVariantIdsByProductName("Wireless Mouse").get(0);
+            String smartPhoneVariantId = productClient.getVariantIdsByProductName("Smartphone").get(0);
+            String phoneCaseVariantId = productClient.getVariantIdsByProductName("phone Case").get(0);
+            String monitorVariantId = productClient.getVariantIdsByProductName("LED Monitor").get(0);
+            String webcamVariantId = productClient.getVariantIdsByProductName("Webcam").get(0);
+            String laptopBagVariantId = productClient.getVariantIdsByProductName("Laptop Bag").get(0);
+            String chairVariantId = productClient.getVariantIdsByProductName("Office Chair").get(0);
+
+            OrderItemsRequest laptopOrder = new OrderItemsRequest(
+                    laptopVariantId,
+                    1,
+                    List.of(new AddonRequest(mouseVariantId))
             );
 
+            OrderItemsRequest smartphoneOrder = new OrderItemsRequest(
+                    smartPhoneVariantId,
+                    1,
+                    List.of(new AddonRequest(phoneCaseVariantId))
+            );
 
-            for (CreateOrderRequest createOrderRequest : orders){
-                orderService.createOrder(createOrderRequest);
+            OrderItemsRequest monitorOrder = new OrderItemsRequest(
+                    monitorVariantId,
+                    1,
+                    List.of(new AddonRequest(webcamVariantId))
+            );
+
+            OrderItemsRequest laptopBagOrder = new OrderItemsRequest(
+                    laptopBagVariantId,
+                    1,
+                    List.of()
+            );
+
+            OrderItemsRequest chairOrder = new OrderItemsRequest(
+                    chairVariantId,
+                    1,
+                    List.of()
+            );
+
+            CreateOrderRequest order1 = new CreateOrderRequest(customer1Id, List.of(laptopOrder));
+            CreateOrderRequest order2 = new CreateOrderRequest(customer2Id, List.of(smartphoneOrder));
+            CreateOrderRequest order3 = new CreateOrderRequest(customer3Id, List.of(monitorOrder));
+            CreateOrderRequest order4 = new CreateOrderRequest(customer4Id, List.of(laptopBagOrder));
+            CreateOrderRequest order5 = new CreateOrderRequest(customer5Id, List.of(chairOrder));
+
+            List<CreateOrderRequest> orders = List.of(order1, order2, order3, order4, order5);
+
+            for (CreateOrderRequest order : orders) {
+                orderService.createOrder(order);
             }
 
-            System.out.println("Order data loaded!!");
-        }
 
+            System.out.println("Sample order created dynamically using Feign!");
+        }
     }
 }

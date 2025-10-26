@@ -1,5 +1,6 @@
 package com.example.product_service.controller;
 
+import com.example.product_service.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -156,25 +159,14 @@ public class ProductController {
         return productService.filterProducts(category, page, pageSize);
     }
 
-    @PutMapping("/reduce/{id}")
+    @GetMapping("/variant-ids/by-product-name/{name}")
     @Operation(
-            summary = "Reduce product stock ",
-            description = "Reduces the quantity of a specific product by the given amount."
+            summary = "This Api is for adding sample Data(Initial Data Loading)",
+            description = "Fetches all variantIds from product names."
     )
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Stock reduced successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Product not found"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error - Failed to fetch products"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Insufficent stock")
-    })
-    public ResponseEntity<ApiResponse<ProductResponse>> updateQuantity(@Parameter(description = "Unique ID of the product to update")@PathVariable String id,
-                                                                       @RequestParam @Min(value = 1, message = "Quantity must be at least 1")
-                                                                       int quantity){
+    public List<String> getVariantIdsByProductName(@PathVariable String name) {
 
-        return productService.updateQuantity(id, quantity);
+        return productService.getVariantIdsByProductName(name);
     }
-
-
-
 
 }

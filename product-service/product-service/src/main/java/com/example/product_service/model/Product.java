@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "products")
 public class Product {
 
@@ -12,27 +14,23 @@ public class Product {
     private String id;
     @TextIndexed
     private String name;
-    private double price;
-    private int quantity;
     @Indexed
     private String category;
+    private List<String> addonProductIds;
+
 
 
     public Product() {
     }
 
-    public Product(String name, double price, int quantity, String category) {
+    public Product(String name, String category, List<String> addonProductIds) {
         this.name = name;
-        this.price = price;
-        this.quantity = quantity;
         this.category = category;
+        this.addonProductIds = addonProductIds;
     }
 
-    public Product(String id, String name, double price, int quantity, String category) {
-        this.id = id;
+    public Product(String name, String category) {
         this.name = name;
-        this.price = price;
-        this.quantity = quantity;
         this.category = category;
     }
 
@@ -52,27 +50,19 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<String> getAddonProductIds() {
+        return addonProductIds;
+    }
+
+    public void setAddonProductIds(List<String> addonProductIds) {
+        this.addonProductIds = addonProductIds;
     }
 }

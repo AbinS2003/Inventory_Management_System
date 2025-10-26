@@ -1,24 +1,57 @@
 package com.example.order_service.model;
 
+import java.util.List;
+import java.util.Map;
+
 public class OrderItem {
 
     private String productId;
+    private String variantId;
     private String productName;
+    private String category;
+    private Map<String, String> attributes;
     private int qty;
     private double price;
-    private String category;
     private double totalPrice;
+    private List<AddonItem> addonItems;
 
     public OrderItem() {
     }
 
-    public OrderItem(String productId, String productName, int qty, double price, String category, double totalPrice) {
+    public OrderItem(String productId, String variantId, String productName, String category, Map<String, String> attributes, int qty, double price, double totalPrice, List<AddonItem> addonItems) {
         this.productId = productId;
+        this.variantId = variantId;
         this.productName = productName;
+        this.category = category;
+        this.attributes = attributes;
         this.qty = qty;
         this.price = price;
-        this.category = category;
         this.totalPrice = totalPrice;
+        this.addonItems = addonItems;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(String variantId) {
+        this.variantId = variantId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getCategory() {
@@ -29,12 +62,12 @@ public class OrderItem {
         this.category = category;
     }
 
-    public String getProductId() {
-        return productId;
+    public Map<String, String> getAttributes() {
+        return attributes;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 
     public int getQty() {
@@ -57,19 +90,15 @@ public class OrderItem {
         return totalPrice;
     }
 
-    public void setTotalAmount(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<AddonItem> getAddonItems() {
+        return addonItems;
+    }
+
+    public void setAddonItems(List<AddonItem> addonItems) {
+        this.addonItems = addonItems;
     }
 }
